@@ -1,73 +1,114 @@
-# Welcome to your Lovable project
+# Creative-Upaay-Full-Stack-Development-Assignment
 
-## Project info
+## Introduction
+This Dashboard is a **web-based task and project management interface** designed to help users manage projects, tasks, and team members efficiently. It features dynamic filtering, task categorization, and interactive UI components.
 
-**URL**: https://lovable.dev/projects/89663c1f-bd7c-4ed1-aecd-a6dd043b5b12
+---
 
-## How can I edit this code?
+## Project Type
+**Frontend Dashboard**
 
-There are several ways of editing your application.
+---
 
-**Use Lovable**
+## 🚀 Deployed App
+- **Frontend:** Fully responsive React + Tailwind UI  
+- **Backend:** Mock data using local state / React Context API  
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/89663c1f-bd7c-4ed1-aecd-a6dd043b5b12) and start prompting.
+---
 
-Changes made via Lovable will be committed automatically to this repo.
+## 🏗️ Directory Structure
 
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
 ```
 
-**Edit a file directly in GitHub**
+Upaay-Dashboard/
+├── src/
+│   ├── components/
+│   ├── contexts/
+│   ├── hooks/
+│   ├── integrations/
+│   ├── lib/
+│   ├── pages/
+│   ├── store/
+│   ├── App.css
+│   ├── App.tsx
+│   └── main.tsx
+├── .gitignore
+├── index.html
+├── package.json
+├── package-lock.json
+├── README.md
+└── vite.config.ts
+```
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+---
 
-**Use GitHub Codespaces**
+## 🎥 Video Walkthrough
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
 
-## What technologies are used for this project?
+---
 
-This project is built with:
+## ✨ Features
+- 📝 **Project & Task Overview** — Display project titles, project logo, and tasks  
+- 📊 **Dynamic Filters** — Filter tasks by priority, category, and due date  
+- 👥 **Team Members** — Avatars with overflow count (+2)  
+- 🎨 **Responsive UI** — Built with Tailwind CSS, fully responsive  
+- 🔗 **Actions & Buttons** — Invite members, share project, edit project title  
+- 📁 **Organized Components** — Reusable React components for scalability
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+---
 
-## How can I deploy this project?
+  ### 📝 Design and Assumptions
+- **UI Design:** Follows a modern dashboard layout inspired by the provided Figma design. Includes project header, team members, task filters, and action buttons.  
+- **Task Management:** Core focus is on tracking tasks and their progress across different projects. Each task can have a priority, status, category, and due date.  
+- **Filters & Actions:** Users can filter tasks dynamically by priority, category, or due date, and clear filters easily.  
+- **Team Collaboration:** Displays team members involved in a project using avatars, including an overflow count for extra members.  
+- **State Management:** All task data and filter states are handled via React Context API. Mock data is used to simulate real project tasks.  
+- **Responsiveness:** The dashboard is fully responsive, ensuring usability across different screen sizes.  
+- **Assumptions:**  
+  - The app is primarily a **to-do / task tracking dashboard**.  
+  - No backend integration; all data is mocked for demonstration purposes.  
+  - Users can see team members and task summaries but cannot modify tasks persistently.  
+  - Designed for desktop-first experience, but layout adjusts for smaller screens.  
 
-Simply open [Lovable](https://lovable.dev/projects/89663c1f-bd7c-4ed1-aecd-a6dd043b5b12) and click on Share -> Publish.
+---
 
-## Can I connect a custom domain to my Lovable project?
+## 🛠️ Installation & Getting Started
 
-Yes, you can!
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/your-username/Creative-Upaay-Full-Stack-Development-Assignment
+   cd Creative-Upaay-Full-Stack-Development-Assignment 
+   ```
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+3. **Set up environment variables**: Create a .env file with necessary configurations.
+  
+4. **Start the development server**:
+   ```bash
+   npm run dev
+   ```
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+---
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+## Credentials
+
+**Test User:**
+
+- **Email:** admin@example.com
+- **Password:** 12345678
+
+  ---
+
+### 🛠️ Tech Stack
+
+**🎨 Frontend:** ReactJS, Vite, TypeScript, Tailwind CSS, shadcn-ui  
+**💻 UI Libraries:** Material-UI, Chakra UI  
+**⚡ Icons:** Lucide React, Material Icons  
+**🧰 State Management:** React Context API  
+**🛠️ Build Tools:** Vite  
+
+
+
+
