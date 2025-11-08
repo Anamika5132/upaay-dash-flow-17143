@@ -92,6 +92,16 @@ Upaay-Dashboard/
 
 ---
 
+## 📸 Visual Overview
+
+### Authentication
+![Authentication Screenshot](https://github.com/Anamika5132/Creative-Upaay-Full-Stack-Development-Assignment/blob/main/images/imge.jpg?raw=true)
+
+### Main Dashboard
+![Main Dashboard](https://github.com/Anamika5132/Creative-Upaay-Full-Stack-Development-Assignment/blob/main/images/img.png?raw=true)
+
+---
+
 ## Credentials
 
 **Test User:**
