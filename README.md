@@ -6,12 +6,12 @@ This Dashboard is a **web-based task and project management interface** designed
 ---
 
 ## Project Type
-**Frontend Dashboard**
+**Frontend**
 
 ---
 
 ## 🚀 Deployed App
-- **Frontend:** Fully responsive React + Tailwind UI  
+- **Frontend:** [Deployed Link](https://todo-dashboard01.netlify.app/)
 - **Backend:** Mock data using local state / React Context API  
 
 ---
