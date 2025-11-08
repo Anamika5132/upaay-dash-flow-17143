@@ -106,8 +106,8 @@ Dashboard/
 
 **Test User:**
 
- **Email:** admin@example.com
- **Password:** 12345678
+ -**Email:** admin@example.com
+ -**Password:** 12345678
 
   ---
 
