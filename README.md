@@ -20,7 +20,7 @@ This Dashboard is a web-based task and project management interface that helps u
 
 ```
 
-Upaay-Dashboard/
+Dashboard/
 ├── src/
 │   ├── components/
 │   ├── contexts/
