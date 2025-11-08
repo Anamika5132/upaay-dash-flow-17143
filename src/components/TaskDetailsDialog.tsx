@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Task, TaskPriority, TaskStatus } from "@/store/types";
+import { Task, TaskPriority, TaskStatus, CustomFieldDefinition } from "@/store/types";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { CalendarIcon, CheckCircle2, Circle, Plus, Trash2, Clock } from "lucide-react";
@@ -14,6 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
+import { CustomFieldsManager } from "./CustomFieldsManager";
 
 interface TaskDetailsDialogProps {
   task: Task | null;
@@ -23,6 +24,7 @@ interface TaskDetailsDialogProps {
   onAddSubtask: (taskId: string, title: string) => void;
   onToggleSubtask: (taskId: string, subtaskId: string) => void;
   onDeleteSubtask: (taskId: string, subtaskId: string) => void;
+  customFieldDefinitions?: CustomFieldDefinition[];
 }
 
 export const TaskDetailsDialog = ({
@@ -33,6 +35,7 @@ export const TaskDetailsDialog = ({
   onAddSubtask,
   onToggleSubtask,
   onDeleteSubtask,
+  customFieldDefinitions = [],
 }: TaskDetailsDialogProps) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -40,17 +43,19 @@ export const TaskDetailsDialog = ({
   const [status, setStatus] = useState<TaskStatus>("todo");
   const [dueDate, setDueDate] = useState<Date | undefined>();
   const [newSubtask, setNewSubtask] = useState("");
+  const [customFields, setCustomFields] = useState<Record<string, string>>({});
 
   // Update local state when task changes
-  useState(() => {
+  useEffect(() => {
     if (task) {
       setTitle(task.title);
       setDescription(task.description);
       setPriority(task.priority);
       setStatus(task.status);
       setDueDate(task.dueDate ? new Date(task.dueDate) : undefined);
+      setCustomFields(task.customFields || {});
     }
-  });
+  }, [task]);
 
   if (!task) return null;
 
@@ -61,6 +66,7 @@ export const TaskDetailsDialog = ({
       priority,
       status,
       dueDate: dueDate ? format(dueDate, "yyyy-MM-dd") : undefined,
+      customFields,
     });
     onClose();
   };
@@ -161,6 +167,17 @@ export const TaskDetailsDialog = ({
                 </PopoverContent>
               </Popover>
             </div>
+
+            {customFieldDefinitions.length > 0 && (
+              <div className="space-y-2">
+                <Label>Custom Fields</Label>
+                <CustomFieldsManager
+                  customFields={customFields}
+                  customFieldDefinitions={customFieldDefinitions}
+                  onChange={setCustomFields}
+                />
+              </div>
+            )}
 
             <div className="flex justify-end gap-2 pt-4">
               <Button variant="outline" onClick={onClose}>

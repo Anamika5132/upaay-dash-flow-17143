@@ -29,37 +29,42 @@ const underlineColors = {
 export const TaskColumn = ({ title, status, tasks, onAddTask, onEditTask, onDeleteTask }: TaskColumnProps) => {
   return (
     <div className="flex flex-col h-full">
-      {/* Column Header */}
-      <div className={cn("mb-4 pb-2 border-b-4", underlineColors[status])}>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <h2 className="font-semibold text-lg text-foreground">{title}</h2>
-            <span className="w-6 h-6 rounded-full bg-muted text-muted-foreground text-xs flex items-center justify-center font-medium">
-              {tasks.length}
-            </span>
+      {/* Column Container with background and rounded borders */}
+      <div 
+        className="flex flex-col h-full rounded-2xl p-4"
+        style={{ backgroundColor: '#F5F5F5' }}
+      >
+        {/* Column Header */}
+        <div className={cn("mb-4 pb-2 border-b-4", underlineColors[status])}>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <h2 className="font-semibold text-lg text-foreground">{title}</h2>
+              <span className="w-6 h-6 rounded-full bg-muted text-muted-foreground text-xs flex items-center justify-center font-medium">
+                {tasks.length}
+              </span>
+            </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => onAddTask(status)}
+              className="h-7 w-7 text-primary hover:bg-primary/10"
+            >
+              <Plus className="h-5 w-5" />
+            </Button>
           </div>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => onAddTask(status)}
-            className="h-7 w-7 text-primary hover:bg-primary/10"
-          >
-            <Plus className="h-5 w-5" />
-          </Button>
         </div>
-      </div>
 
-      {/* Droppable Area */}
-      <Droppable droppableId={status}>
-        {(provided, snapshot) => (
-          <div
-            ref={provided.innerRef}
-            {...provided.droppableProps}
-            className={cn(
-              "flex-1 space-y-4 overflow-y-auto px-1 pb-4",
-              snapshot.isDraggingOver && "bg-accent/10 rounded-lg"
-            )}
-          >
+        {/* Droppable Area */}
+        <Droppable droppableId={status}>
+          {(provided, snapshot) => (
+            <div
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+              className={cn(
+                "flex-1 space-y-4 overflow-y-auto px-1 pb-4",
+                snapshot.isDraggingOver && "bg-accent/10 rounded-lg"
+              )}
+            >
             {tasks.map((task, index) => (
               <Draggable key={task.id} draggableId={task.id} index={index}>
                 {(provided, snapshot) => (
@@ -92,6 +97,7 @@ export const TaskColumn = ({ title, status, tasks, onAddTask, onEditTask, onDele
           </div>
         )}
       </Droppable>
+      </div>
     </div>
   );
 };

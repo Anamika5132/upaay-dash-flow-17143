@@ -10,7 +10,10 @@ import {
   toggleSubtask,
   deleteSubtask,
   setSearchFilter,
-  setPriorityFilter
+  setPriorityFilter,
+  setStatusFilter,
+  setCategoryFilter,
+  setDueDateFilter
 } from "@/store/tasksSlice";
 import { Task, TaskStatus } from "@/store/types";
 import { Sidebar } from "@/components/Sidebar";
@@ -28,7 +31,7 @@ import { LogOut } from "lucide-react";
 const Index = () => {
   const { user, signOut } = useAuth();
   const dispatch = useAppDispatch();
-  const { tasks, filter } = useAppSelector((state) => state.tasks);
+  const { tasks, filter, customFieldDefinitions } = useAppSelector((state) => state.tasks);
   
   // Sync tasks from database on mount
   useEffect(() => {
@@ -46,14 +49,58 @@ const Index = () => {
 
   // Filter tasks
   const filteredTasks = tasks.filter((task) => {
+    // Search filter
     const matchesSearch =
       filter.search === "" ||
       task.title.toLowerCase().includes(filter.search.toLowerCase()) ||
       task.description.toLowerCase().includes(filter.search.toLowerCase());
 
+    // Priority filter
     const matchesPriority = filter.priority === "all" || task.priority === filter.priority;
 
-    return matchesSearch && matchesPriority;
+    // Status filter
+    const matchesStatus = filter.status === "all" || task.status === filter.status;
+
+    // Category filter (using customFields.category)
+    const taskCategory = task.customFields?.category || "";
+    const matchesCategory = filter.category === "" || taskCategory === filter.category;
+
+    // Due date filter
+    let matchesDueDate = true;
+    if (filter.dueDate && task.dueDate) {
+      const taskDueDate = new Date(task.dueDate);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const taskDate = new Date(taskDueDate);
+      taskDate.setHours(0, 0, 0, 0);
+      
+      switch (filter.dueDate) {
+        case "overdue":
+          matchesDueDate = taskDate < today;
+          break;
+        case "today":
+          matchesDueDate = taskDate.getTime() === today.getTime();
+          break;
+        case "thisWeek": {
+          const weekEnd = new Date(today);
+          weekEnd.setDate(today.getDate() + (7 - today.getDay()));
+          matchesDueDate = taskDate >= today && taskDate <= weekEnd;
+          break;
+        }
+        case "thisMonth": {
+          const monthEnd = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+          matchesDueDate = taskDate >= today && taskDate <= monthEnd;
+          break;
+        }
+        default:
+          matchesDueDate = true;
+      }
+    } else if (filter.dueDate && !task.dueDate) {
+      // If filter is set but task has no due date, exclude it
+      matchesDueDate = false;
+    }
+
+    return matchesSearch && matchesPriority && matchesStatus && matchesCategory && matchesDueDate;
   });
 
   // Group tasks by status
@@ -70,7 +117,7 @@ const Index = () => {
     dispatch(addTaskToDB({
       ...taskData,
       subtasks: [],
-      customFields: {},
+      customFields: taskData.customFields || {},
     }))
       .unwrap()
       .then(() => {
@@ -138,7 +185,10 @@ const Index = () => {
       <div className="flex-1 ml-64 flex flex-col min-h-screen">
         {/* Navbar with Logout */}
         <div className="relative">
-          <Navbar />
+          <Navbar 
+            searchValue={filter.search}
+            onSearchChange={(search) => dispatch(setSearchFilter(search))}
+          />
           <div className="absolute top-4 right-4">
             <Button
               onClick={signOut}
@@ -159,8 +209,12 @@ const Index = () => {
 
           {/* Project Header */}
           <ProjectHeader
-            onFilterChange={(search) => dispatch(setSearchFilter(search))}
+            tasks={tasks}
+            filter={filter}
             onPriorityChange={(priority) => dispatch(setPriorityFilter(priority))}
+            onStatusChange={(status) => dispatch(setStatusFilter(status))}
+            onCategoryChange={(category) => dispatch(setCategoryFilter(category))}
+            onDueDateChange={(dueDate) => dispatch(setDueDateFilter(dueDate))}
           />
 
           {/* Board */}
@@ -182,6 +236,7 @@ const Index = () => {
         onClose={() => setAddDialogOpen(false)}
         onSubmit={handleAddTask}
         defaultStatus={addDialogStatus}
+        customFieldDefinitions={customFieldDefinitions}
       />
 
       {detailsDialogTask && (
@@ -190,6 +245,7 @@ const Index = () => {
           open={!!detailsDialogTask}
           onClose={() => setDetailsDialogTask(null)}
           onUpdate={handleUpdateTask}
+          customFieldDefinitions={customFieldDefinitions}
           onAddSubtask={(taskId, title) => {
             const task = tasks.find(t => t.id === taskId);
             if (task) {

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { Task, TasksState, TaskPriority, TaskStatus, Subtask } from "./types";
+import { Task, TasksState, TaskPriority, TaskStatus, Subtask, CustomFieldDefinition } from "./types";
 import { supabase } from "@/integrations/supabase/client";
 
 const STORAGE_KEY = "taskboard_state";
@@ -129,7 +129,14 @@ const loadStateFromStorage = (): TasksState => {
       search: "",
       priority: "all",
       status: "all",
+      category: "",
+      dueDate: null,
     },
+    customFieldDefinitions: [
+      // Default custom fields
+      { id: "category", name: "Category", type: "tag", options: ["Frontend", "Backend", "Design", "Marketing", "Other"] },
+      { id: "tags", name: "Tags", type: "tag", options: [] },
+    ],
   };
 };
 
@@ -266,6 +273,27 @@ const tasksSlice = createSlice({
     setStatusFilter: (state, action: PayloadAction<TaskStatus | "all">) => {
       state.filter.status = action.payload;
     },
+    setCategoryFilter: (state, action: PayloadAction<string>) => {
+      state.filter.category = action.payload;
+    },
+    setDueDateFilter: (state, action: PayloadAction<string | null>) => {
+      state.filter.dueDate = action.payload;
+    },
+    addCustomFieldDefinition: (state, action: PayloadAction<CustomFieldDefinition>) => {
+      state.customFieldDefinitions.push(action.payload);
+      saveStateToStorage(state);
+    },
+    updateCustomFieldDefinition: (state, action: PayloadAction<{ id: string; updates: Partial<CustomFieldDefinition> }>) => {
+      const field = state.customFieldDefinitions.find(f => f.id === action.payload.id);
+      if (field) {
+        Object.assign(field, action.payload.updates);
+        saveStateToStorage(state);
+      }
+    },
+    deleteCustomFieldDefinition: (state, action: PayloadAction<string>) => {
+      state.customFieldDefinitions = state.customFieldDefinitions.filter(f => f.id !== action.payload);
+      saveStateToStorage(state);
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -298,6 +326,11 @@ export const {
   setSearchFilter,
   setPriorityFilter,
   setStatusFilter,
+  setCategoryFilter,
+  setDueDateFilter,
+  addCustomFieldDefinition,
+  updateCustomFieldDefinition,
+  deleteCustomFieldDefinition,
 } = tasksSlice.actions;
 
 export default tasksSlice.reducer;

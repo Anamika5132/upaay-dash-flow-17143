@@ -5,11 +5,12 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { TaskPriority, TaskStatus } from "@/store/types";
+import { TaskPriority, TaskStatus, CustomFieldDefinition } from "@/store/types";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
+import { CustomFieldsManager } from "./CustomFieldsManager";
 
 interface AddTaskDialogProps {
   open: boolean;
@@ -20,16 +21,19 @@ interface AddTaskDialogProps {
     priority: TaskPriority;
     status: TaskStatus;
     dueDate?: string;
+    customFields?: Record<string, string>;
   }) => void;
   defaultStatus: TaskStatus;
+  customFieldDefinitions?: CustomFieldDefinition[];
 }
 
-export const AddTaskDialog = ({ open, onClose, onSubmit, defaultStatus }: AddTaskDialogProps) => {
+export const AddTaskDialog = ({ open, onClose, onSubmit, defaultStatus, customFieldDefinitions = [] }: AddTaskDialogProps) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState<TaskPriority>("medium");
   const [status, setStatus] = useState<TaskStatus>(defaultStatus);
   const [dueDate, setDueDate] = useState<Date | undefined>();
+  const [customFields, setCustomFields] = useState<Record<string, string>>({});
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,12 +45,14 @@ export const AddTaskDialog = ({ open, onClose, onSubmit, defaultStatus }: AddTas
       priority,
       status,
       dueDate: dueDate ? format(dueDate, "yyyy-MM-dd") : undefined,
+      customFields,
     });
 
     setTitle("");
     setDescription("");
     setPriority("medium");
     setDueDate(undefined);
+    setCustomFields({});
     onClose();
   };
 
@@ -131,6 +137,17 @@ export const AddTaskDialog = ({ open, onClose, onSubmit, defaultStatus }: AddTas
               </PopoverContent>
             </Popover>
           </div>
+
+          {customFieldDefinitions.length > 0 && (
+            <div className="space-y-2">
+              <Label>Custom Fields</Label>
+              <CustomFieldsManager
+                customFields={customFields}
+                customFieldDefinitions={customFieldDefinitions}
+                onChange={setCustomFields}
+              />
+            </div>
+          )}
 
           <div className="flex justify-end gap-2 pt-4">
             <Button type="button" variant="outline" onClick={onClose}>

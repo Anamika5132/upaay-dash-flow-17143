@@ -4,13 +4,15 @@ import { useAuth } from "@/contexts/AuthContext";
 
 interface NavbarProps {
   className?: string;
+  searchValue?: string;
+  onSearchChange?: (value: string) => void;
 }
 
-export const Navbar = ({ className }: NavbarProps) => {
+export const Navbar = ({ className, searchValue = "", onSearchChange }: NavbarProps) => {
   const { user } = useAuth();
   
   return (
-    <nav className={`bg-card border-b border-border px-6 py-3 ${className}`}>
+    <nav className={`border-b border-border px-6 py-3 ${className}`} style={{ backgroundColor: '#F5F5F5' }}>
       <div className="flex items-center justify-between gap-4">
         {/* Search Bar */}
         <div className="relative w-96">
@@ -19,6 +21,8 @@ export const Navbar = ({ className }: NavbarProps) => {
             type="search"
             placeholder="Search for anything..."
             className="pl-10 bg-background border-border"
+            value={searchValue}
+            onChange={(e) => onSearchChange?.(e.target.value)}
           />
         </div>
 

@@ -28,11 +28,23 @@ export interface Task {
   updatedAt: number;
 }
 
+export interface CustomFieldDefinition {
+  id: string;
+  name: string;
+  type: "text" | "select" | "number" | "date" | "tag";
+  options?: string[]; // For select and tag types
+  required?: boolean;
+  defaultValue?: string;
+}
+
 export interface TasksState {
   tasks: Task[];
   filter: {
     search: string;
     priority: TaskPriority | "all";
     status: TaskStatus | "all";
+    category: string;
+    dueDate: string | null; // "overdue" | "today" | "thisWeek" | "thisMonth" | null
   };
+  customFieldDefinitions: CustomFieldDefinition[];
 }
